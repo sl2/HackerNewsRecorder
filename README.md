@@ -2,6 +2,7 @@
 
 A simple Hacker News Recorder & Reader for analytics.
 
+![screen1](./hnrec.png)
 
 ## Environment
 
