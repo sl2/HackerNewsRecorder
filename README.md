@@ -1,6 +1,7 @@
 # Hacker News Recorder
 
-A simple Hacker News Recorder & Reader
+A simple Hacker News Recorder & Reader for analytics.
+
 
 ## Environment
 
@@ -12,10 +13,13 @@ You can deploy this application following two environments.
 
 ## Requirements
 
-- Python 2.7.x
-- MongoDB or MongoHQ (if you use heroku)
+- [Python 2.7.x](http://www.python.org)
+    - [Bottle](http://bottlepy.org/docs/dev/)
+    - [PyMongo](https://pypi.python.org/pypi/pymongo/)
+    - [karan / HackerNewsAPI](https://github.com/karan/HackerNewsAPI)
+- [MongoDB](http://www.mongodb.org) or [MongoHQ](http://www.mongohq.com/home) (if you use heroku)
 
-## Instllation : Local server, IaaS
+## Installation : Local server, IaaS
 
 1. Download the repositry
          
@@ -33,7 +37,7 @@ You can deploy this application following two environments.
 
         python app.py
 
-## Instllation : heroku
+## Installation : heroku
 
 1. Download the repositry
         
@@ -60,6 +64,12 @@ You can deploy this application following two environments.
 2. Read it
 
         http://app_url
+
+## ToDo
+
+1. Add analytics
+2. Improve reader
+3. Improve database update method
 
 ## License
 
