@@ -61,7 +61,7 @@ You can deploy this application following two environments.
 
         http://app_url/update_db
 
-    It is recommended to use 'cron'.
+    It is recommended to use crond.
 
 2. Read it
 
