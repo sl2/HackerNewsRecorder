@@ -11,6 +11,7 @@ You can deploy this application following two environments.
 1. local server, IaaS
 2. heroku
 	- MongoHQ is required
+        - Only Web Dyno x1 is required. So you can use free plan.
 
 ## Requirements
 
@@ -62,9 +63,9 @@ You can deploy this application following two environments.
 
         http://app_url/update_db
 
-    It is recommended to use crond.
+    It is recommended to use "crond" and "wget --spider" for automatically update.
 
-2. Read it
+2. Read entries
 
         http://app_url
 
@@ -72,7 +73,7 @@ You can deploy this application following two environments.
 
 1. Add analytics
 2. Improve reader
-3. Improve database update method
+3. Improve database update method (current method is not so good)
 
 ## License
 
