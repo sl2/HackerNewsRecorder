@@ -8,7 +8,6 @@ from bottle import route, run, template
 from bottle import static_file
 from pymongo import MongoClient
 from hn import HN
-import nltk
 
 
 MONGO_URL = os.environ.get('MONGOHQ_URL')
