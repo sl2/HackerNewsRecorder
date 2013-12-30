@@ -32,7 +32,6 @@ MSG_ERR_INPUT_UPDATE = '<h2>Input</h2><p> Collection Name:{{collection_name}}, P
 MSG_ERR_INPUT_READ = '<h2>Input</h2><p> Collection Name:{{collection_name}}</p>'
 MSG_INFO_STATUS = '<p> Get {{page_limit}} pages ({{count}} entries) from {{collection_name}}. </p>'
 
-
 def download(collection, story_type, page_limit):
     hn = HN()
     ids = []
@@ -57,8 +56,9 @@ def download(collection, story_type, page_limit):
         ids.append(story_id)
     return len(ids)
 
+# Routing
 @route('/', method='GET')
-def get_titles():
+def read_top():
     stories = collection["top"].find().sort("points", -1)
     return template('index', data=stories)
 
@@ -76,7 +76,6 @@ def read(collection_name):
 
 @route('/update/<collection_name>/<page_limit>', method='GET')
 def update(collection_name, page_limit):
- 
     page_limit = int(page_limit)
     if page_limit < 1 or page_limit > 10:
         return template(MSG_ERR_PAGE_LIMIT + MSG_ERR_INPUT_UPDATE, 
@@ -98,6 +97,7 @@ def update(collection_name, page_limit):
 def css(filename):
     return static_file(filename, root='./contents')
 
+# Create HTTP Server
 if MONGO_URL: # for heroku
     run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 else: # for local
