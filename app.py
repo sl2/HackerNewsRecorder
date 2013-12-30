@@ -9,7 +9,6 @@ from bottle import static_file
 from pymongo import MongoClient
 from hn import HN
 
-
 # Mongo DB Information
 MONGO_URL = os.environ.get('MONGOHQ_URL')
 
