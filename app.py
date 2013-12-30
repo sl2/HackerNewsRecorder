@@ -61,12 +61,6 @@ def get_titles():
     stories = collection["top"].find().sort("points", -1)
     return template('index', data=stories)
 
-@route('/update_db', method='GET')
-def update_db(count=0):
-    # "" means "top". It's specification of the hn library.
-    count = download(top, "", 7) 
-    return template('<p>{{count}}</p>', count=count)
-
 @route('/update/<collection_name>/<page_limit>', method='GET')
 def update(collection_name, page_limit):
  
