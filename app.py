@@ -26,7 +26,6 @@ collection = {
         "best":db["best"],
 }
 
-
 # Messages
 MSG_ERR_PAGE_LIMIT = '<h2>Page Limit Error</h2><p>Between 1 and 10 are allowed.</p>'
 MSG_ERR_COLLECTION_NAME = '<h2>Collection Name Error</h2><p>Only "top", "best" and "newest" collection are allowed.</p>'
