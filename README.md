@@ -57,18 +57,25 @@ You can deploy this application following two environments.
 4. Restart the application
         heroku restart --app [app name]
 
-
 ## Usage
 
-1. Download new entries
+1. Download new entries from Hacker News to MongoDB
 
-        http://app_url/update_db
+    - http://APPURL/update/<collection_name>/<page_num>
 
-    It is recommended to use "crond" and "wget --spider" for automatic updates.
+        - <collection_name> : top, newest, best
 
-2. Read entries
+        - <page_nume> : 1, ... ,10
 
-        http://app_url
+    It is recommended to use "crond" and "wget --spider" commands for automatic updates.
+
+2. Read entries from MongoDB
+
+    - top: http://APPURL or http://APPURL/top
+
+    - best: http://APPURL/best
+        
+    - newest: http://APPURL/newest
 
 ## ToDo
 
