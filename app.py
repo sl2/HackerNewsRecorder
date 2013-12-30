@@ -10,6 +10,7 @@ from pymongo import MongoClient
 from hn import HN
 
 
+# Mongo DB Information
 MONGO_URL = os.environ.get('MONGOHQ_URL')
 
 if MONGO_URL: # for heroku
@@ -18,12 +19,25 @@ if MONGO_URL: # for heroku
 else: # for local
     client = MongoClient('localhost', 27017)
     db = client["hackernews"]
-top = db["top"]
 
-def download(collection, stype, plimit):
+collection = {
+        "top":db["top"],
+        "newest":db["newest"],
+        "best":db["best"],
+}
+
+
+# Messages
+MSG_ERR_PAGE_LIMIT = '<h2>Page Limit Error</h2><p>Between 1 and 10 are allowed.</p>'
+MSG_ERR_COLLECTION_NAME = '<h2>Collection Name Error</h2><p>Only "top", "best" and "newest" collection are allowed.</p>'
+MSG_ERR_INPUT = '<h2>Input</h2><p> Collection Name:{{collection_name}}, Page Limit:{{page_limit}} </p>'
+MSG_INFO_STATUS = '<p> Get {{page_limit}} pages ({{count}} entries) from {{collection_name}}. </p>'
+
+
+def download(collection, story_type, page_limit):
     hn = HN()
     ids = []
-    for s in hn.get_stories(story_type=stype, page_limit=plimit):
+    for s in hn.get_stories(story_type=story_type, page_limit=page_limit):
         story = {
             "_id":                  s.story_id,
             "rank":                 s.rank,
@@ -46,7 +60,7 @@ def download(collection, stype, plimit):
 
 @route('/', method='GET')
 def get_titles():
-    stories = top.find().sort("points", -1)
+    stories = collection["top"].find().sort("points", -1)
     return template('index', data=stories)
 
 @route('/update_db', method='GET')
@@ -54,6 +68,26 @@ def update_db(count=0):
     # "" means "top". It's specification of the hn library.
     count = download(top, "", 7) 
     return template('<p>{{count}}</p>', count=count)
+
+@route('/update/<collection_name>/<page_limit>', method='GET')
+def update(collection_name, page_limit):
+ 
+    page_limit = int(page_limit)
+    if page_limit < 1 or page_limit > 10:
+        return template(MSG_ERR_PAGE_LIMIT + MSG_ERR_INPUT, 
+                collection_name=collection_name, page_limit=page_limit)
+
+    if collection_name == "top":
+        # "" means "top" by the specification of hn library.
+        count = download(collection[collection_name], "", page_limit)
+    elif collection_name == "best" or collection_name == "newest":
+        count = download(collection[collection_name], collection_name, page_limit)
+    else:
+        return template(MSG_ERR_COLLECTION_NAME + MSG_ERR_INPUT, 
+                collection_name=collection_name, page_limit=page_limit)
+
+    return template(MSG_INFO_STATUS, 
+            collection_name=collection_name, page_limit=page_limit, count=count)
 
 @route('/contents/<filename>')
 def css(filename):
