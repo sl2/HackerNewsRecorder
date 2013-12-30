@@ -28,7 +28,8 @@ collection = {
 # Messages
 MSG_ERR_PAGE_LIMIT = '<h2>Page Limit Error</h2><p>Between 1 and 10 are allowed.</p>'
 MSG_ERR_COLLECTION_NAME = '<h2>Collection Name Error</h2><p>Only "top", "best" and "newest" collection are allowed.</p>'
-MSG_ERR_INPUT = '<h2>Input</h2><p> Collection Name:{{collection_name}}, Page Limit:{{page_limit}} </p>'
+MSG_ERR_INPUT_UPDATE = '<h2>Input</h2><p> Collection Name:{{collection_name}}, Page Limit:{{page_limit}} </p>'
+MSG_ERR_INPUT_READ = '<h2>Input</h2><p> Collection Name:{{collection_name}}</p>'
 MSG_INFO_STATUS = '<p> Get {{page_limit}} pages ({{count}} entries) from {{collection_name}}. </p>'
 
 
@@ -61,21 +62,33 @@ def get_titles():
     stories = collection["top"].find().sort("points", -1)
     return template('index', data=stories)
 
+@route('/<collection_name>', method='GET')
+def read(collection_name):
+    if collection_name in ["top", "best", "newest"]:
+        stories = collection[collection_name].find().sort("points", -1)
+        return template('index', data=stories)
+    else:
+        return template(MSG_ERR_COLLECTION_NAME + MSG_ERR_INPUT_READ, 
+                collection_name=collection_name)
+    
+    stories = collection["top"].find().sort("points", -1)
+    return template('index', data=stories)
+
 @route('/update/<collection_name>/<page_limit>', method='GET')
 def update(collection_name, page_limit):
  
     page_limit = int(page_limit)
     if page_limit < 1 or page_limit > 10:
-        return template(MSG_ERR_PAGE_LIMIT + MSG_ERR_INPUT, 
+        return template(MSG_ERR_PAGE_LIMIT + MSG_ERR_INPUT_UPDATE, 
                 collection_name=collection_name, page_limit=page_limit)
 
     if collection_name == "top":
         # "" means "top" by the specification of hn library.
         count = download(collection[collection_name], "", page_limit)
-    elif collection_name == "best" or collection_name == "newest":
+    elif collection_name in ["best", "newest"]:
         count = download(collection[collection_name], collection_name, page_limit)
     else:
-        return template(MSG_ERR_COLLECTION_NAME + MSG_ERR_INPUT, 
+        return template(MSG_ERR_COLLECTION_NAME + MSG_ERR_INPUT_UPDATE, 
                 collection_name=collection_name, page_limit=page_limit)
 
     return template(MSG_INFO_STATUS, 
